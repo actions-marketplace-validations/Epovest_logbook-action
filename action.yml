@@ -1,0 +1,45 @@
+name: 'Epovest Logbook'
+description: 'Record a deploy, a release or any shipped change in your Epovest logbook, dated in front of your AI visibility curves.'
+author: 'Epovest'
+branding:
+  icon: 'edit-3'
+  color: 'purple'
+
+inputs:
+  api-key:
+    description: 'An Epovest API key with the write scope (epo_...). Store it as a repository secret.'
+    required: true
+  project-id:
+    description: 'The UUID of the Epovest project the entry belongs to.'
+    required: true
+  label:
+    description: 'Short wording of the action, as it will show next to the citation curves.'
+    required: true
+  category:
+    description: 'One of content, technical, translation, canon, press, other.'
+    required: false
+    default: 'technical'
+  notes:
+    description: 'Free notes. Left empty, the repository, the commit and the run are recorded.'
+    required: false
+    default: ''
+  occurred-at:
+    description: 'When the action happened, ISO 8601, read as UTC. Left empty, the API stamps now.'
+    required: false
+    default: ''
+  quest-id:
+    description: 'The quest of the same project this action moves forward.'
+    required: false
+    default: ''
+  api-base:
+    description: 'Base URL of the Epovest API. Only change it if you were told to.'
+    required: false
+    default: 'https://api.epovest.com/v1'
+
+outputs:
+  entry-id:
+    description: 'The id of the logbook entry that was recorded.'
+
+runs:
+  using: 'node20'
+  main: 'index.js'

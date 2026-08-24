@@ -1,0 +1,25 @@
+name: Check
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax
+        run: node --check index.js
+      - name: The action metadata parses
+        run: node -e "const fs=require('fs');const y=fs.readFileSync('action.yml','utf8');if(!/^name:/m.test(y)||!/runs:/m.test(y))process.exit(1);console.log('action.yml looks well formed')"
+      - name: It refuses a missing key
+        run: |
+          set +e
+          env "INPUT_PROJECT-ID=x" "INPUT_LABEL=y" node index.js
+          code=$?
+          set -e
+          test $code -ne 0 && echo "refused as expected"
